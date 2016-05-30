@@ -44,7 +44,7 @@ spreadを :math:`F:= F_{1} - F_{2}` とすると、 :ref:`Kirk's approximation` 
 
 .. math::
  \sigma^{K} 
- & := \sqrt{\beta^{2} - 2\rho\beta\rho\frac{\gamma}{\gamma+\kappa} + \delta^{2}\left(\frac{\gamma}{\gamma + \kappa}\right)^{2}}, \\
+ & := \sqrt{\beta^{2} - 2\rho\beta\delta\frac{\gamma}{\gamma+\kappa} + \delta^{2}\left(\frac{\gamma}{\gamma + \kappa}\right)^{2}}, \\
  \alpha
  & = F_{1}(0)e^{\mu_{1}T}, \\
  \beta
@@ -429,7 +429,7 @@ Kirk's approximation
 ここで
 
 .. math::
- \sigma^{K} := \sqrt{\beta^{2} - 2\rho\beta\rho\frac{\gamma}{\gamma+\kappa} + \delta^{2}\left(\frac{\gamma}{\gamma + \kappa}\right)^{2}}
+ \sigma^{K} := \sqrt{\beta^{2} - 2\rho\beta\delta\frac{\gamma}{\gamma+\kappa} + \delta^{2}\left(\frac{\gamma}{\gamma + \kappa}\right)^{2}}
 
 .. index::
     operator splitting method
