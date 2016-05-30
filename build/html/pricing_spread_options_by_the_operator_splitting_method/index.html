@@ -1,0 +1,508 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Pricing Spread Options by the Operator Splitting Method &mdash; thesis_resume 0.1 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="thesis_resume 0.1 ドキュメント" href="../index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pricing-spread-options-by-the-operator-splitting-method">
+<h1>Pricing Spread Options by the Operator Splitting Method<a class="headerlink" href="#pricing-spread-options-by-the-operator-splitting-method" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<div class="section" id="id1">
+<h2>論文の概要<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p><a class="reference external" href="http://papers.ssrn.com/sol3/Papers.cfm?abstract_id=2429696">Pricing Spread Options by the Operator Splitting Method</a> の概要。</p>
+<ul class="simple">
+<li>IR, FX, commodity marketでpopularなspread optionのpricingの話。</li>
+<li>spread optionは幾何ブラウン運動に対する解析的な結果はput/callでも知られていない。</li>
+<li>幾何ブラウン運動を仮定した場合のcall optionの近似解として <a class="reference internal" href="#kirk-s-approximation"><span class="std std-ref">Kirk&#8217;s approximation</span></a> と呼ばれる近似が知られているが、理論的な解析はされていない。</li>
+<li>本論文では、 <a class="reference internal" href="#lie-trotter-operator-splitting-method"><span class="std std-ref">Lie-Trotter operator splitting method</span></a> を用いて <a class="reference internal" href="#kirk-s-approximation"><span class="std std-ref">Kirk&#8217;s approximation</span></a> の近似式が得られることを示す。</li>
+<li>また高次のoperator splittingを用いて、 <a class="reference internal" href="#kirk-s-approximation"><span class="std std-ref">Kirk&#8217;s approximation</span></a> より精度の良い近似式が得られることを示す。</li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h2>設定<a class="headerlink" href="#id3" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>原資産 <span class="math">\(F_{1}, F_{2}\)</span> が対数正規過程とする。
+つまり、</p>
+<div class="math">
+\[\begin{split}\,d F_{1}(t)
+&amp; = \mu_{1}F_{1}(t)\,dt
++ \sigma_{1} F_{1}(t) \,d W_{1}(t) \\
+\,d F_{2}(t)
+&amp; =  \mu_{1}F_{2}(t)\,dt
++\sigma_{2} F_{2}(t) \,d W_{2}(t) \\
+\,d \langle W_{1}, W_{2} \rangle (t)
+&amp; = \rho \,d t, \\
+\,d B(t)
+&amp; = rB(t) \,d t\end{split}\]</div>
+<p>ここで、 <span class="math">\(\sigma_{1}, \sigma_{2}, r\)</span> は定数で、 <span class="math">\(W_{1}, W_{2}\)</span> はリスク中立測度のもとでのブラウン運動である。
+<span class="math">\(B\)</span> はMoney Market accountで、 <span class="math">\(r\)</span> は金利。
+<span class="math">\(\rho\)</span> はブラウン運動間の相関を表すを表す定数である。</p>
+<p>spreadを <span class="math">\(F:= F_{1} - F_{2}\)</span> とすると、 <a class="reference internal" href="#kirk-s-approximation"><span class="std std-ref">Kirk&#8217;s approximation</span></a> は以下となる。</p>
+<div class="math">
+\[p = \alpha \Phi \left( \ln \left( \frac{\alpha}{\gamma + \kappa} \right) + \frac{\sigma^{K}}{2} \right)
+ - (\gamma + \kappa) \Phi \left( \frac{\ln \left(\frac{\alpha}{\gamma + \kappa} \right)}{\sigma^{K}} - \frac{\sigma^{K}}{2} \right)\]</div>
+<p>ただし、</p>
+<div class="math">
+\[\begin{split}\sigma^{K}
+&amp; := \sqrt{\beta^{2} - 2\rho\beta\rho\frac{\gamma}{\gamma+\kappa} + \delta^{2}\left(\frac{\gamma}{\gamma + \kappa}\right)^{2}}, \\
+\alpha
+&amp; = F_{1}(0)e^{\mu_{1}T}, \\
+\beta
+&amp; = \sigma_{1}\sqrt{T}, \\
+\gamma
+&amp; = F_{2}(0)e^{\mu_{2}T}, \\
+\delta
+&amp; = \sigma_{2}\sqrt{T}, \\
+\kappa
+&amp; = Ke^{-rT}.\end{split}\]</div>
+</div>
+<div class="section" id="lie-trotter-operator-splittingkirk-s-approx">
+<h2>Lie-Trotter operator splittingによるKirk&#8217;s approx.の導出<a class="headerlink" href="#lie-trotter-operator-splittingkirk-s-approx" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>複製ポートフォリオの議論より以下のPDEを得る。</p>
+<div class="math">
+\[ \begin{align}\begin{aligned}\left\{\frac{1}{2}\sigma_{1}^{2}F_{1}^{2}\frac{\partial^{2}}{\partial F_{1}^{2}}
++ \rho \sigma_{1}\sigma_{2}F_{1}F_{2}\frac{\partial^{2}}{\partial F_{1}\partial F_{2}}
++ \frac{1}{2}\sigma_{2}^{2}F_{2}^{2}\frac{\partial^{2}}{\partial F_{2}^{2}} - r - \frac{\partial}{\partial \tau} \right\} P(F_{1}, F_{2}, \tau)
+= 0\\P(F_{1}, F_{2}, 0) = \mathrm{max}(F_{1} - F_{2} - K, 0)\end{aligned}\end{align} \]</div>
+<p>実際 <span class="math">\(P(F_{1}, F_{2}, t)\)</span> を <span class="math">\(t\)</span> 時点のEuropean Call Spread optionの価格を <span class="math">\(P(F_{1}, F_{2}, t)\)</span> とすると以下を満たす <span class="math">\(a_{1}, a_{2}, b\)</span> が存在するので、</p>
+<div class="math">
+\[\begin{split}P(F_{1}(t), F_{2}(t), t)
+= a_{1}(t)F_{1}(t) + a_{2}F_{2}(t) + b(t)B(t) \\\end{split}\]</div>
+<p>より、右辺は</p>
+<div class="math">
+\[\begin{split}&amp; \,d (a_{1}(t)F_{1}(t) + a_{2}F_{2}(t) + b(t)B(t)) \\
+&amp; = a_{1}(t)\,d F_{1}(t) + a_{2}(t)\,d F_{2}(t) + b(t)\,d B(t) \\
+&amp; = \left( a_{1}(t)\mu_{1}F_{1}(t) + a_{2}(t)\mu_{2}F_{2} + b(t)rB(t) \right)\,dt
++ a_{1}(t)\sigma_{1}F_{1}(t)\,dW_{1}(t)
++ a_{2}(t)\sigma_{2}F_{2}(t)\,dW_{2}(t)\end{split}\]</div>
+<p>が成立する。
+また、左辺は伊藤の公式より</p>
+<div class="math">
+\[\begin{split}\,d P
+&amp; = \left( \frac{\partial P}{\partial F_{1}}\mu_{1}F_{1}
++ \frac{\partial P}{\partial F_{2}}\mu_{2}F_{2}
++ \frac{1}{2}\frac{\partial^{2} P}{\partial F_{1}^{2}}\sigma_{1}^{2}F_{1}^{2}
++ \frac{\partial^{2} P}{\partial F_{1} \partial F_{2}}\rho\sigma_{1}\sigma_{2}F_{1}F_{2}
++ \frac{1}{2}\frac{\partial^{2} P}{\partial F_{2}^{2}}\sigma_{2}^{2}F_{2}^{2} \right) \,dt \\
+&amp; + \frac{\partial P}{\partial F_{1}}\sigma_{1}F_{1}\,dW_{1}(t)
++ \frac{\partial P}{\partial F_{2}}\sigma_{2}F_{2}\,dW_{2}(t)\end{split}\]</div>
+<p>両辺を比較すると、</p>
+<div class="math">
+\[\begin{split}a_{1}(t)
+&amp; = \frac{\partial P}{\partial F_{1}} \\
+a_{2}(t)
+&amp; = \frac{\partial P}{\partial F_{2}} \\
+a_{1}(t)\mu_{1}F_{1}(t) + a_{2}(t)\mu_{2}F_{2} + b(t)rB(t)
+&amp; = \frac{\partial P}{\partial F_{1}}\mu_{1}F_{1}
++ \frac{\partial P}{\partial F_{2}}\mu_{2}F_{2}
++ \frac{1}{2}\frac{\partial^{2} P}{\partial F_{1}^{2}}\sigma_{1}^{2}F_{1}^{2}
++ \frac{\partial^{2} P}{\partial F_{1} \partial F_{2}}\rho\sigma_{1}\sigma_{2}F_{1}F_{2}
++ \frac{1}{2}\frac{\partial^{2} P}{\partial F_{2}^{2}}\sigma_{2}^{2}F_{2}^{2}
+P(F_{1}(t), F_{2}(t), t)
+&amp; = a_{1}(t)F_{1}(t) + a_{2}F_{2}(t) + b(t)B(t) \\\end{split}\]</div>
+<p>より、 <span class="math">\(a_{1}, a_{2}, b\)</span> を消去できる。
+最後に <span class="math">\(\tilde{P}(F_{1}, F_{2}, t) := P(F_{1}, F_{2}, T - t)\)</span> とし、 <span class="math">\(\tilde{P}\)</span> を改めて <span class="math">\(P\)</span> とおけばよい。</p>
+<p>さて、</p>
+<div class="math">
+\[\begin{split}R_{1}
+&amp; := \frac{F_{1}}{F_{2} + K}, \\
+R_{2}
+&amp; := F_{2} + K\end{split}\]</div>
+<p>とおくと、上記のPDEは次のように書ける。</p>
+<div class="math">
+\[\left( L_{0} + L_{1} - r - \frac{\partial }{\partial t} \right) P(R_{1}, R_{2}, t) = 0,\]</div>
+<div class="math" id="equation-definition_sigma2_tilde">
+<span class="eqno">(1)</span>\[\begin{split}L_{0}
+&amp; := \frac{1}{2}\tilde{\sigma}^{2}R_{1}^{2}\frac{\partial^{2}}{\partial R_{1}^{2}}, \\
+L_{1}
+&amp; := \frac{1}{2}\tilde{\sigma_{2}}^{2}R_{2}^{2}\frac{\partial^{2}}{\partial R_{2}^{2}}
++ (\rho\sigma_{1} - \tilde{\sigma_{2}})\tilde{\sigma_{2}}R_{1}R_{2}\frac{\partial}{\partial R_{1} \partial R_{2}}
+- (\rho\sigma_{1} - \tilde{\sigma_{2}})\tilde{\sigma_{2}}R_{1}\frac{\partial}{\partial R_{1}},\\
+\tilde{\sigma}
+&amp; := \sqrt{\sigma_{1}^{2} - 2\rho\sigma_{1}\tilde{\sigma_{2}} + \tilde{\sigma_{2}}^{2}} \\
+\tilde{\sigma_{2}}
+&amp; := \sigma_{2} \left( \frac{F_{2}}{F_{2} + K} \right)\end{split}\]</div>
+<p>境界条件は</p>
+<div class="math">
+\[P(R_{1}, R_{2}, 0) = R_{2} \mathrm{max}(R_{1} - 1, 0)\]</div>
+<p>境界条件は明らか。
+PDEについては、</p>
+<div class="math">
+\[\begin{split}F_{1}(R_{1}, R_{2})
+&amp; := R_{1}R_{2}, \\
+F_{2}(R_{1}, R_{2})
+&amp; := R_{2} - K, \\
+C(R_{1}, R_{2}, t)
+&amp; := P(F_{1}(R_{1}, R_{2}), F_{2}(R_{1}, R_{2}), t), \\\end{split}\]</div>
+<p>とおくと</p>
+<div class="math">
+\[\begin{split}\frac{\partial F_{1}}{\partial R_{1}} &amp; = R_{2},
+\frac{\partial F_{1}}{\partial R_{2}} &amp; = R_{1}, \\
+\frac{\partial F_{2}}{\partial R_{1}} &amp; = 0,
+\frac{\partial F_{2}}{\partial R_{2}} &amp; = 1, \\\end{split}\]</div>
+<div class="math">
+\[ \begin{align}\begin{aligned}\begin{split}\frac{\partial C}{\partial R_{1}}
+&amp; = \frac{\partial P}{\partial F_{1}}\frac{\partial F_{1}}{\partial R_{1}}
++ \frac{\partial P}{\partial F_{2}}\frac{\partial F_{2}}{\partial R_{1}} \\
+&amp; = R_{2}\frac{\partial P}{\partial F_{1}} ,\end{split}\\\begin{split}\frac{\partial C}{\partial R_{2}}
+&amp; = \frac{\partial P}{\partial F_{1}}\frac{\partial F_{1}}{\partial R_{2}}
++ \frac{\partial P}{\partial F_{2}}\frac{\partial F_{2}}{\partial R_{2}} \\
+&amp; = R_{1}\frac{\partial P}{\partial F_{1}}
++ \frac{\partial P}{\partial F_{2}},\end{split}\end{aligned}\end{align} \]</div>
+<div class="math">
+\[\begin{split}\frac{\partial^{2} C}{\partial R_{1}^{2}}
+&amp; = \frac{\partial }{\partial R_{1}}\left(\frac{\partial P}{\partial F_{1}}\frac{\partial F_{1}}{\partial R_{1}} \right) \\
+&amp; = R_{2}^{2}\frac{\partial^{2} P}{\partial F_{1}^{2}},\end{split}\]</div>
+<div class="math">
+\[\begin{split}\frac{\partial^{2} C}{\partial R_{1} \partial R_{2}}
+&amp; = \frac{\partial }{\partial R_{2}}\left( R_{2}\frac{\partial P}{\partial F_{1}} \right) \\
+&amp; = \frac{\partial P}{\partial F_{1}}
++ R_{2}\frac{\partial}{\partial F_{1}} \left(\frac{\partial P}{\partial F_{1}}R_{1} + \frac{\partial P}{\partial F_{2}}\right) \\
+&amp; = \frac{\partial}{\partial F_{1}}P
++ R_{1}R_{2}\frac{\partial^{2}}{\partial F_{1}^{2}}P
++ R_{2}\frac{\partial^{2}}{\partial F_{1} \partial F_{2}}P \\\end{split}\]</div>
+<div class="math">
+\[\begin{split}\frac{\partial^{2} C}{\partial R_{2}^{2}}
+&amp; = \frac{\partial}{\partial R_{2}}\left(R_{1}\frac{\partial P}{\partial F_{1}} + \frac{\partial P}{\partial F_{2}}\right) \\
+&amp; = R_{1}^{2}\frac{\partial}{\partial F_{1}^{2}}P
++ 2R_{1}\frac{\partial}{\partial F_{1} \partial F_{2}}P
++ \frac{\partial^{2}}{\partial F_{2}^{2}}P \\\end{split}\]</div>
+<p>より、</p>
+<div class="math">
+\[\begin{split}\frac{\partial^{2} P}{\partial F_{1}^{2}}
+&amp; = \frac{1}{R_{2}^{2}}\frac{\partial^{2} C}{\partial R_{1}^{2}}, \\
+\frac{\partial^{2} P}{\partial F_{1} \partial F_{2}}
+&amp; = \frac{\partial^{2} C}{\partial R_{1} \partial R_{2}}
+- \frac{1}{R_{2}}\frac{\partial C}{\partial R_{1}}
+- \frac{R_{1}}{R_{2}}\frac{\partial^{2} C}{\partial R_{1}^{2}} \\
+\frac{\partial^{2} P}{\partial F_{2}^{2}}
+&amp; = \frac{\partial^{2} C}{\partial R_{2}^{2}}
+- \frac{R_{1}^{2}}{R_{2}^{2}}\frac{\partial^{2} C}{\partial R_{1}^{2}}
+- 2R_{1}\frac{\partial^{2} C}{\partial R_{1} \partial R_{2}}
++ 2\frac{R_{1}}{R_{2}}\frac{\partial C}{\partial R_{1}}
++ 2\frac{R_{1}^{2}}{R_{2}}\frac{\partial^{2} C}{\partial R_{1}^{2}}\end{split}\]</div>
+<p>が成立。
+これをもとのPDEに代入し、 <span class="math">\(C(R_{1}, R_{2}, t)\)</span> を改めて <span class="math">\(P(R_{1}, R_{2}, t)\)</span> とおけば良い。</p>
+<p>次に、PDEを近似的に解く。
+初期値 <span class="math">\(x \in \mathbb{R}^{d}\)</span> 、微分作用素 <span class="math">\(L\)</span> の微分方程式の解を <span class="math">\(\gamma_{x}^{L}(t)\)</span> と書く。
+つまり、 <span class="math">\(\gamma_{x}^{L}(t)\)</span> は次を満たす。</p>
+<div class="math">
+\[\begin{split}\frac{\,d\gamma_{x}^{L}(t)}{\,dt}
+&amp; = L\gamma_{x}^{L}(t) \\
+\gamma_{x}^{L}(0)
+&amp; = x.\end{split}\]</div>
+<p>微分作用素 <span class="math">\(L\)</span> の指数写像 <span class="math">\(\exp(tL)x\)</span> を以下で定義する。</p>
+<div class="math">
+\[\exp(tL)x := \gamma_{x}^{L}(t)\]</div>
+<p>指数写像を用いてPDEを書き直す。
+まず、 <span class="math">\(\tilde{P}(R_{1}, R_{2}, t) := e^{-rt}P(R_{1}, R_{2}, t)\)</span> と置くと次のPDEを得る。</p>
+<div class="math">
+\[\begin{split}\left( L_{0} + L_{1} - \frac{\partial }{\partial t} \right) \tilde{P}(R_{1}, R_{2}, t)
+&amp; = 0, \\
+\tilde{P}(R_{1}, R_{2}, 0)
+&amp; = R_{2} \mathrm{max}(R_{1} - 1, 0).\end{split}\]</div>
+<p>よって、 <span class="math">\(P\)</span> は指数写像を用いて次のように書ける。</p>
+<div class="math">
+\[P(R_{1}, R_{2}, t) = e^{-rt}\exp\left( t(L_{0} + L_{1}) \right)R_{2}\mathrm{max}(R_{1} - 1, 0).\]</div>
+<p><a class="reference internal" href="#lie-trotter-operator-splitting-method"><span class="std std-ref">Lie-Trotter operator splitting method</span></a> によって次のように近似できる。</p>
+<div class="math">
+\[P^{\mathrm{LT}}(R_{1}, R_{2}, t) = e^{-rt}\exp\left( tL_{0} \right)\exp\left( tL_{1} \right)R_{2}\mathrm{max}(R_{1} - 1, 0).\]</div>
+<p>一般に、 初期値 <span class="math">\(f(x)\)</span> の指数写像 <span class="math">\(\exp(tL)f(x)\)</span> に対して <span class="math">\(Lf(x) = 0\)</span> ならば、 <span class="math">\(\exp(tL)f(x) = f(x)\)</span> が成り立つ。
+実際、指数写像の定義より</p>
+<div class="math">
+\[\frac{\,d\gamma_{f(x)}^{L}(t)}{\,dt}
+= L\gamma_{f(x)}^{L}(t)\]</div>
+<p>だから、両辺を <span class="math">\([0, t]\)</span> で <span class="math">\(t\)</span> について積分を繰り返すと、</p>
+<div class="math">
+\[\gamma_{f(x)}^{L}(t)
+= f(x)
++ \sum_{n=1}^{\infty} \frac{t^{n}}{n!}(L)^{n} f(x)\]</div>
+<p>となる。
+条件より、無限級数の項はゼロ。
+以上より、 <span class="math">\(L_{1}R_{2}\mathrm{max}(R_{1} - 1, 0) = 0\)</span> だから、</p>
+<div class="math">
+\[\begin{split}P^{\mathrm{LT}}(R_{1}, R_{2}, t)
+&amp; = e^{-rt}\exp\left( tL_{0} \right)R_{2}\mathrm{max}(R_{1} - 1, 0) \\
+&amp; = R_{2} e^{-rt}\exp\left( tL_{0} \right)\mathrm{max}(R_{1} - 1, 0)\end{split}\]</div>
+<p>となる。
+<span class="math">\(\exp(tL_{0})\mathrm{max}(R_{1} - 1, 0)\)</span> を解けば良い。
+よって、</p>
+<div class="math">
+\[P^{\mathrm{LT}}(R_{1}, R_{2}, t) = e^{-rt}R_{2}\left(R_{1} N(\xi_{1}) - N(\xi_{2}) \right)\]</div>
+<p>ここで、</p>
+<div class="math">
+\[\begin{split}\xi_{1}
+&amp; := \frac{1}{\tilde{\sigma}\sqrt{t}} \left( \ln R_{1} + \frac{1}{2} \tilde{\sigma}^{2} \right), \\
+\xi_{2}
+&amp; := \xi_{1} - \tilde{\sigma}\sqrt{t},\end{split}\]</div>
+<p>であり、 <span class="math">\(N(\xi)\)</span> は標準正規分布の分布関数である。
+現在価値に対する価格式にする為、 <span class="math">\(S_{i}(t) := e^{-rt}F_{i}(t)\)</span> とおくと、 <a class="reference internal" href="#kirk-s-approximation"><span class="std std-ref">Kirk&#8217;s approximation</span></a> が得られる。</p>
+<div class="math">
+\[P_{\mathrm{Kirk}}(S_{1}, S_{2}, t) = S_{1} N(d_{1}) - (S_{2} + Ke^{-rt})N(d_{2})\]</div>
+<p>ここで、</p>
+<div class="math">
+\[\begin{split}d_{1}
+&amp; := \frac{\ln S_{1} - \ln (S_{2} + Ke^{-rt})}{\tilde{\sigma}\sqrt{t}}
++ \frac{1}{2}\tilde{\sigma}\sqrt{t} \\
+d_{2}
+&amp; := d_{1} - \tilde{\sigma}\sqrt{t} \\
+\tilde{\sigma}
+&amp; := \sqrt{\sigma_{1}^{2} - 2\rho\sigma_{1}\tilde{\sigma_{2}} + \tilde{\sigma_{2}}^{2}} \\
+\tilde{\sigma_{2}}
+&amp; := \sigma_{2}\left(\frac{S_{2}}{S_{2} + Ke^{-rt}}\right) \\\end{split}\]</div>
+<p>Lie-Trotter operator splittingでは <span class="math">\(\tilde{\sigma}^{2}t \ll 1\)</span> である必要がある。
+つまり、以下の状況では精度が悪くなる可能性がある。</p>
+<ul>
+<li><p class="first">相関 <span class="math">\(\rho\)</span> が負</p>
+</li>
+<li><p class="first">相関が正で、 <span class="math">\(\sigma_{1}, \tilde{\sigma_{2}}\)</span> の値が大きく異なる。</p>
+<blockquote>
+<div><ul class="simple">
+<li>定義へ <a href="#equation-definition_sigma2_tilde">(1)</a></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="operator-splitting">
+<h2>高次のoperator splittingへの拡張<a class="headerlink" href="#operator-splitting" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>Strang operator splitting を用いるとPDEは次のように近似できる。</p>
+<div class="math">
+\[\begin{split}P^{\mathrm{Strang}}(R_{1}, R_{2}, t)
+&amp; = \exp\left(\frac{1}{2}tL_{1}\right)\exp(tL_{0})\exp\left(\frac{1}{2}tL_{1}\right)R_{2}\mathrm{max}(R_{1} - 1, 0)  \\
+&amp; = \exp\left(\frac{1}{2}tL_{1}\right)P^{\mathrm{LT}}(R_{1}, R_{2}, t) \\
+&amp; = P^{\mathrm{LT}}(R_{1}, R_{2}, t)
++ \sum_{n=1}^{\infty}\frac{(t/2)^{n}}{n!}(L_{1})^{n} P^{\mathrm{LT}}(R_{1}, R_{2}, t)\end{split}\]</div>
+<p><a class="reference internal" href="#kirk-s-approximation"><span class="std std-ref">Kirk&#8217;s approximation</span></a>  <span class="math">\(P^{\mathrm{LT}}\)</span> に調整が入ったものとみることができる。
+無限級数の第一項を解くと</p>
+<div class="math">
+\[\begin{split}\frac{1}{2}tL_{1}P^{\mathrm{LT}}(R_{1}, R_{2}, t)
+&amp; = \frac{1}{2}t\tilde{\sigma_{2}}^{2}e^{-rt}R_{2}\Phi(\xi_{2})
+    \left(\frac{R_{2}}{\tilde{\sigma}}\frac{\partial\sigma}{\partial R_{2}}\right) \\
+        &amp; \left\{ \xi_{2}\left( 1 - \frac{\rho\sigma_{1}}{\tilde{\sigma_{2}}} \right)
+             + \frac{1}{2}\tilde{\sigma}\sqrt{t}
+                \left\{ \xi_{1}\xi_{2} + (1 - \rho^{2})\left( \frac{\sigma_{1}}{\rho\sigma_{1} - \tilde{\sigma_{2}}} \right)^{2} \right\}
+                    \left( \frac{R_{2}}{\tilde{\sigma_{2}}}\frac{\partial \tilde{\sigma}}{\partial R_{2}} \right) \right\}.\end{split}\]</div>
+<p>ここで、</p>
+<div class="math">
+\[\begin{split}\Phi(x)
+&amp; := \frac{1}{\sqrt{2\pi}}\exp\left(-\frac{x^{2}}{2}\right) \\
+\frac{R_{2}}{\tilde{\sigma}}
+&amp; = - \frac{(\rho\sigma_{1} - \tilde{\sigma_{2}})\sigma_{2}}{\tilde{\sigma}^{2}}\frac{K}{R_{2}}.\end{split}\]</div>
+<p>Lie-Trotter operator splitting methodと同様に、 <span class="math">\(S_{i}(t) := F_{i}(t)e^{-rt}\)</span> とおくと</p>
+<div class="math">
+\[\begin{split}P(S_{1}, S_{2}, t)
+&amp; \approx P_{\mathrm{Kirk}}(S_{1}, S_{2}, t) \\
+&amp; - \frac{1}{2}t\tilde{\sigma_{2}}^{2}Ke^{-rt}\Phi(d_{2})
+    \frac{\rho\sigma_{1} - \tilde{\sigma_{2}}\sigma_{2}}{\tilde{\sigma}^{2}} \\
+    &amp; \left( d_{2}\left( 1 - \frac{\rho\sigma_{1}}{\tilde{\sigma_{2}}} \right)
+    - \frac{1}{2}\tilde{\sigma}\sqrt{t}
+       \left\{ d_{1}d_{2} + (1 - \rho^{2})
+           \left(\frac{\sigma_{1}}{\rho\sigma_{1} - \tilde{\sigma_{2}}}\right)^{2} \right\}
+       \frac{(\rho\sigma_{1} - \tilde{\sigma_{2}})\sigma_{2}}{\tilde{\sigma}^{2}}
+       \frac{Ke^{-rt}}{S_{2} + Ke^{-rt}} \right)\end{split}\]</div>
+</div>
+<div class="section" id="appendix">
+<h2>Appendix<a class="headerlink" href="#appendix" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="section" id="european-spread-option">
+<h3>European spread optionに対する近似式<a class="headerlink" href="#european-spread-option" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>また <span class="math">\(S_{1}, S_{2}\)</span> が以下を満たすような確率過程であるとする。
+(e.g. log normal process）</p>
+<div class="math">
+\[\begin{split}S_{1}(t)
+&amp; = \alpha e^{\beta W_{1}(t) - \beta^{2}/2}, \\
+S_{2}(t)
+&amp; = \gamma e^{\delta W_{2}(t) - \delta^{2}/2}.\end{split}\]</div>
+<p>ここで、 <span class="math">\(W_{1}, W_{2}\)</span> は相関のあるブラウン運動で、 <span class="math">\(\alpha, \beta, \gamma, \delta\)</span> は適当な定数である。
+spreadを以下で定義する。</p>
+<div class="math">
+\[S := S_{1} - S_{2}.\]</div>
+<div class="section" id="bachelier-s-model">
+<span id="index-0"></span><h4>Bachelier&#8217;s Model<a class="headerlink" href="#bachelier-s-model" title="このヘッドラインへのパーマリンク">¶</a></h4>
+<p><span class="math">\(S\)</span> を下記のGaussian distributionで近似する。</p>
+<div class="math">
+\[S \sim \mathrm{N}(\mathbb{E}(S), \mathbb{V}(S))\]</div>
+<p>期待値と分散は以下で与えられる。</p>
+<div class="math">
+\[\mathbb{E}(S) = \alpha - \gamma\]</div>
+<div class="math">
+\[\mathbb{V}(S) = \alpha^{2}\left(e^{\beta^{2}} - 1\right) - 2\alpha\gamma\left(e^{\rho\beta\delta} - 1\right) + \gamma^{2}\left(e^{\delta^{2}} - 1\right).\]</div>
+<p>このとき、call optionの価値は</p>
+<div class="math">
+\[p = (\alpha - \gamma - \kappa) \Phi\left(\frac{\alpha - \gamma - \kappa}{\sigma^{B}}\right)
+ + \sigma^{B}\Phi\left(\frac{\alpha - \gamma - \kappa}{\sigma^{B}}\right)\]</div>
+<p>ここで、</p>
+<div class="math">
+\[\sigma^{B} := \sqrt{\alpha^{2}(e^{\beta^{2}} - 1) - 2\alpha\gamma(e^{\rho\beta\delta} - 1) + \gamma^{2}(e^{\delta^{2}} - 1)}\]</div>
+</div>
+<div class="section" id="kirk-s-approximation">
+<span id="index-1"></span><span id="id4"></span><h4>Kirk&#8217;s approximation<a class="headerlink" href="#kirk-s-approximation" title="このヘッドラインへのパーマリンク">¶</a></h4>
+<div class="math">
+\[p = \alpha \Phi \left( \ln \left( \frac{\alpha}{\gamma + \kappa} \right) + \frac{\sigma^{K}}{2} \right)
+ - (\gamma + \kappa) \Phi \left( \frac{\ln \left(\frac{\alpha}{\gamma + \kappa} \right)}{\sigma^{K}} - \frac{\sigma^{K}}{2} \right)\]</div>
+<p>ここで</p>
+<div class="math">
+\[\sigma^{K} := \sqrt{\beta^{2} - 2\rho\beta\rho\frac{\gamma}{\gamma+\kappa} + \delta^{2}\left(\frac{\gamma}{\gamma + \kappa}\right)^{2}}\]</div>
+</div>
+</div>
+<div class="section" id="operator-splitting-method">
+<span id="index-2"></span><h3>Operator splitting method<a class="headerlink" href="#operator-splitting-method" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="lie-trotter-operator-splitting-method">
+<span id="id5"></span><h4>Lie-Trotter operator splitting method<a class="headerlink" href="#lie-trotter-operator-splitting-method" title="このヘッドラインへのパーマリンク">¶</a></h4>
+<p><span class="math">\(L_{1}, L_{2}\)</span> を微分作用素とし、 <span class="math">\(x \in \mathbb{R}^{d}\)</span> とする。
+指数写像 <span class="math">\(\exp\left( t(L_{0} + L_{1}) \right)x\)</span> に対して以下が成り立つ。</p>
+<div class="math">
+\[\exp\left( t(L_{0} + L_{1}) \right) = \exp( tL_{0} ) \exp( tL_{1}) + O(t)\]</div>
+<p>微分作用素 <span class="math">\(L\)</span> がリー括弧積について可換な時(i.e. <span class="math">\([L_{1}, L_{2}] = [L_{2}, L_{1}]\)</span> ) 誤差0で成立する。
+operator splittingは、微分作用素の和をについての微分方程式を、 <span class="math">\(L_{1}\)</span> と <span class="math">\(L_{2}\)</span> それぞれに関する微分方程式で近似する。
+よって、 <span class="math">\(L_{1}, L_{2}\)</span> に関する微分方程式が解析的に解くことが可能なら、高速に計算可能となる。</p>
+</div>
+<div class="section" id="operator-spittting-method">
+<h4>高次のoperator spittting method<a class="headerlink" href="#operator-spittting-method" title="このヘッドラインへのパーマリンク">¶</a></h4>
+<p>Lie-Trotter operator splittingは2次の近似だが、より高次の近似を構成する方法も知られている。
+<span class="math">\(A, B\)</span> を非可換作用素(今までの <span class="math">\(L_{1}, L_{2}\)</span> など）とする。
+次の近似は <a class="reference internal" href="#f-neri-1988" id="id6">[F_Neri_1988]</a> <a class="reference internal" href="#m-suzuki-1985" id="id7">[M_Suzuki_1985]</a> による。</p>
+<div class="math">
+\[\exp(t(A + b)) = \exp(\frac{1}{2}tA)\exp(tB)\exp(\frac{1}{2}A) + O(t^{2})\]</div>
+<p>この近似は、Strang operator splittingなどと知られている。</p>
+</div>
+</div>
+</div>
+<div class="section" id="reference">
+<h2>Reference<a class="headerlink" href="#reference" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<table class="docutils citation" frame="void" id="c-lo-2014" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[C_Lo_2014]</td><td>C.Lo, Pricing Spread Options by the Operator Splitting Method (2014).</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="h-yoshida-1990" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[H_Yoshida_1990]</td><td>H.Yoshida, Construction of higher order sympletic integrator (1990)</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="f-neri-1988" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id6">[F_Neri_1988]</a></td><td>F.Neri, Lie algebras and canonical integration(1988)</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="m-suzuki-1985" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id7">[M_Suzuki_1985]</a></td><td>M.Suzuki, Decomposition formulas of exponential operators and Lie exponentials with some applications to quantum mechanics and statistical physics.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Pricing Spread Options by the Operator Splitting Method</a><ul>
+<li><a class="reference internal" href="#id1">論文の概要</a></li>
+<li><a class="reference internal" href="#id3">設定</a></li>
+<li><a class="reference internal" href="#lie-trotter-operator-splittingkirk-s-approx">Lie-Trotter operator splittingによるKirk&#8217;s approx.の導出</a></li>
+<li><a class="reference internal" href="#operator-splitting">高次のoperator splittingへの拡張</a></li>
+<li><a class="reference internal" href="#appendix">Appendix</a><ul>
+<li><a class="reference internal" href="#european-spread-option">European spread optionに対する近似式</a><ul>
+<li><a class="reference internal" href="#bachelier-s-model">Bachelier&#8217;s Model</a></li>
+<li><a class="reference internal" href="#kirk-s-approximation">Kirk&#8217;s approximation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#operator-splitting-method">Operator splitting method</a><ul>
+<li><a class="reference internal" href="#lie-trotter-operator-splitting-method">Lie-Trotter operator splitting method</a></li>
+<li><a class="reference internal" href="#operator-spittting-method">高次のoperator spittting method</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#reference">Reference</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/pricing_spread_options_by_the_operator_splitting_method/index.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>クイック検索</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="検索" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, i05nagai.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      
+      |
+      <a href="../_sources/pricing_spread_options_by_the_operator_splitting_method/index.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
